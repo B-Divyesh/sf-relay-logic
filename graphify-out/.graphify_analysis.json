@@ -210,13 +210,13 @@
       "degree": 10
     },
     {
-      "id": "src_main_nextboard",
-      "label": "nextBoard()",
+      "id": "src_puzzle_generatepuzzle",
+      "label": "generatePuzzle()",
       "degree": 10
     },
     {
-      "id": "src_puzzle_generatepuzzle",
-      "label": "generatePuzzle()",
+      "id": "src_main_nextboard",
+      "label": "nextBoard()",
       "degree": 10
     },
     {
@@ -230,8 +230,8 @@
       "degree": 9
     },
     {
-      "id": "package_scripts",
-      "label": "scripts",
+      "id": "src_puzzle_getdemopuzzle",
+      "label": "getDemoPuzzle()",
       "degree": 8
     }
   ],
@@ -248,8 +248,19 @@
       "why": "connects across different repos/directories; peripheral node `solveBoard()` unexpectedly reaches hub `solvePuzzle()`"
     },
     {
-      "source": "bindEvents()",
-      "target": "createGameState()",
+      "source": "boardHtml()",
+      "target": "occupiedCells()",
+      "source_files": [
+        "src/main.ts",
+        "src/game.ts"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "calls",
+      "why": "bridges separate communities"
+    },
+    {
+      "source": "gamePanel()",
+      "target": "occupiedCells()",
       "source_files": [
         "src/main.ts",
         "src/game.ts"
@@ -260,7 +271,7 @@
     },
     {
       "source": "loadPlayState()",
-      "target": "createGameState()",
+      "target": "cloneGameState()",
       "source_files": [
         "src/main.ts",
         "src/game.ts"
@@ -270,18 +281,7 @@
       "why": "bridges separate communities"
     },
     {
-      "source": "nextBoard()",
-      "target": "createGameState()",
-      "source_files": [
-        "src/main.ts",
-        "src/game.ts"
-      ],
-      "confidence": "EXTRACTED",
-      "relation": "calls",
-      "why": "bridges separate communities"
-    },
-    {
-      "source": "startDaily()",
+      "source": "loadPlayState()",
       "target": "createGameState()",
       "source_files": [
         "src/main.ts",
