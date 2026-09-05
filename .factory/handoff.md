@@ -10,7 +10,7 @@
 - Deployment: Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
-The deployment was built after the implementation commit. The live footer reports build `2baa0ea`.
+The product behavior was built from the implementation commit. A later Graphify-only rebuild makes the live footer report `adc7ce06`; verification 3 normalized that label and the resulting source-map filename and found the JavaScript otherwise byte-identical to candidate `2baa0ea`. The live CSS is byte-identical.
 
 ## What was built
 
@@ -113,3 +113,11 @@ Independent verification on 2026-09-05 reviewed implementation `9c0bb2c2a50f15dd
 The clean checkout passed `npm ci`, `npm test` (8 unit and 24 browser tests), all 16 declared claim commands, and `npm run build`. The 24-test suite also passed against live HTTPS. Fresh desktop and phone entry checks, the complete three-board run, win and loss screens, demo isolation, restart and recovery, keyboard and touch, focus, reduced motion, 200% text, routes, privacy requests, security headers, and Lighthouse checks otherwise passed. Lighthouse scored 100/100/100/100.
 
 Verification verdict: **FAIL** with two findings and one untested public claim. The visible Sound after a move behavior lacks an outcome test and claim entry. Saved-data deletion has an untagged regression but no claim entry or dedicated claim command. The Privacy, Terms, and external footer links measure 21.6 px high at 390 px instead of the required 44 px touch target. See `.factory/verification-2.md` and `/work/.evidence/relay-logic-verify-2/`.
+
+## Independent verification 3
+
+Independent verification on 2026-09-05 reviewed implementation `2baa0eab3319529988826a02a402e67fc2b8a428`, release handoff `fd621a6012b46a4870ed4ddc8791ff78e8ea7570`, and SHA record `0353f345177ccdcf9bc62daf4712e8c03a895cc1` against the live site. The live footer reports later Graphify-only build label `adc7ce06`; normalized live JavaScript and exact CSS comparison confirm the same product behavior.
+
+From a detached clean worktree, `npm ci`, `npm test` (8 unit and 26 browser tests), `npm run build`, and all 18 declared claim commands passed. The 26 browser tests also passed against live HTTPS. Fresh desktop and phone sessions, touch, keyboard, all three sample wins, a daily-board win, loss and same-seed restart, demo isolation, corrupt and blocked storage recovery, focus, reduced motion, 200% text, privacy requests, routes, headers, and the designed HTTP 404 passed. Lighthouse mobile scored 100/100/100/100. Earlier verification findings are resolved, including the sound and saved-data claim commands and 44 px footer targets.
+
+Verification verdict: **FAIL** with two findings and seven untested public claims. Four public promises have no complete claim entry: no ads, letter-and-shape signal redundancy, no countdown, and a demo banner that persists through board changes. Three promises are only partly covered: Tab and Space keyboard operation, Reset demo deleting both demo keys and restoring sample board 1 from later progress, and local storage of the learn step and timer. Manual live checks show those behaviors work; the failure is the mandatory claim coverage. See `.factory/verification-3.md` and `/work/.evidence/relay-logic-verify-3/`.
