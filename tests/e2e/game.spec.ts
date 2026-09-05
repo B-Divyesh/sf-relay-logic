@@ -140,7 +140,8 @@ test('@claim:privacy-local sends no play data to another origin', async ({ page 
   await page.goto('/demo');
   await page.getByRole('button', { name: 'Explain one rule' }).click();
   await page.getByRole('button', { name: 'Test circuit' }).click();
-  expect([...origins]).toEqual(['http://127.0.0.1:4173']);
+  const productOrigin = await page.evaluate(() => window.location.origin);
+  expect([...origins]).toEqual([productOrigin]);
 });
 
 test('@claim:keyboard-play operates the board with arrows and Enter', async ({ page }) => {

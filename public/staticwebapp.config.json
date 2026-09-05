@@ -4,6 +4,15 @@
     { "route": "/demo", "rewrite": "/index.html" },
     { "route": "/privacy", "rewrite": "/index.html" },
     { "route": "/terms", "rewrite": "/index.html" },
+    { "route": "/assets/*", "allowedRoles": ["anonymous"] },
+    { "route": "/favicon.svg", "allowedRoles": ["anonymous"] },
+    { "route": "/apple-touch-icon.png", "allowedRoles": ["anonymous"] },
+    { "route": "/og-relay-logic.png", "allowedRoles": ["anonymous"] },
+    { "route": "/og-relay-logic.svg", "allowedRoles": ["anonymous"] },
+    { "route": "/robots.txt", "allowedRoles": ["anonymous"] },
+    { "route": "/sitemap.xml", "allowedRoles": ["anonymous"] },
+    { "route": "/404.css", "allowedRoles": ["anonymous"] },
+    { "route": "/404.html", "allowedRoles": ["anonymous"] },
     { "route": "/*", "statusCode": 404 }
   ],
   "navigationFallback": {
