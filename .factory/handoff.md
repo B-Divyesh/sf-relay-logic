@@ -90,3 +90,11 @@ Independent verification on 2026-09-05 reviewed implementation `3ef2ff40b732ced3
 `npm ci`, `npm run build`, `npm test`, all 12 declared claim commands, the live 20-test suite, the worker URL verifier, fresh desktop and phone sessions, touch, keyboard, win/loss, privacy, headers, routes, and designed 404 checks passed. The earlier static-asset 404 issue remains resolved: the live hashed script is 200 and immutable-cached.
 
 Verification verdict: **FAIL**. Four public behavior claims have no `.factory/claims.json` entry or tagged regression test: touch input, stepping back along a path, Undo restoring the last valid action, and leaving demo mode without copying demo data. The behavior worked in the manual check, but the claims contract requires automated coverage. See `.factory/verification-1.md` for evidence and repair details.
+
+## Independent verification 2
+
+Independent verification on 2026-09-05 reviewed implementation `9c0bb2c2a50f15dd98d48d6d4ddcbe97476e9aed` and documentation `1d7d6635fd30c674593aaa3850b3956f92e44dd9` against the live site. The live footer reports later Graphify/report label `8a604bc6`; the diff contains no product source, public asset, package, or host configuration change. Fresh build asset hashes match live exactly.
+
+The clean checkout passed `npm ci`, `npm test` (8 unit and 24 browser tests), all 16 declared claim commands, and `npm run build`. The 24-test suite also passed against live HTTPS. Fresh desktop and phone entry checks, the complete three-board run, win and loss screens, demo isolation, restart and recovery, keyboard and touch, focus, reduced motion, 200% text, routes, privacy requests, security headers, and Lighthouse checks otherwise passed. Lighthouse scored 100/100/100/100.
+
+Verification verdict: **FAIL** with two findings and one untested public claim. The visible Sound after a move behavior lacks an outcome test and claim entry. Saved-data deletion has an untagged regression but no claim entry or dedicated claim command. The Privacy, Terms, and external footer links measure 21.6 px high at 390 px instead of the required 44 px touch target. See `.factory/verification-2.md` and `/work/.evidence/relay-logic-verify-2/`.
