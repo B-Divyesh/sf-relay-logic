@@ -65,6 +65,46 @@ test('@a11y phone footer links have 44px hit areas', async ({ page }) => {
   }
 });
 
+test('@a11y demo-banner actions keep a 3:1 focus outline on desktop and phone', async ({ page }) => {
+  const contrast = (foreground: string, background: string): number => {
+    const channels = (color: string) => color.match(/\d+(?:\.\d+)?/g)!.slice(0, 3).map(Number);
+    const luminance = (color: string) => {
+      const [red, green, blue] = channels(color).map((channel) => {
+        const normalized = channel / 255;
+        return normalized <= 0.04045
+          ? normalized / 12.92
+          : ((normalized + 0.055) / 1.055) ** 2.4;
+      });
+      return 0.2126 * red + 0.7152 * green + 0.0722 * blue;
+    };
+    const [lighter, darker] = [luminance(foreground), luminance(background)].sort((a, b) => b - a);
+    return (lighter + 0.05) / (darker + 0.05);
+  };
+
+  for (const viewport of [{ width: 1440, height: 1000 }, { width: 390, height: 844 }]) {
+    await page.setViewportSize(viewport);
+    await page.goto('/demo');
+    for (const name of ['Reset demo', 'Start for real']) {
+      const button = page.getByRole('button', { name });
+      await button.focus();
+      await expect(button).toBeFocused();
+      const focus = await button.evaluate((element) => {
+        const buttonStyle = getComputedStyle(element);
+        const bannerStyle = getComputedStyle(element.closest('.demo-banner')!);
+        return {
+          color: buttonStyle.outlineColor,
+          style: buttonStyle.outlineStyle,
+          width: Number.parseFloat(buttonStyle.outlineWidth),
+          background: bannerStyle.backgroundColor,
+        };
+      });
+      expect(focus.style).not.toBe('none');
+      expect(focus.width).toBeGreaterThanOrEqual(3);
+      expect(contrast(focus.color, focus.background)).toBeGreaterThanOrEqual(3);
+    }
+  }
+});
+
 test('@a11y reduced motion removes visible transition duration', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();

@@ -144,6 +144,10 @@ main,
 
 .demo-actions { display: inline-flex; gap: 8px; }
 
+/* The standard blue ring is for the ivory faceplate. These controls sit on
+   charcoal, so they use the faceplate color to keep keyboard focus distinct. */
+.demo-banner .text-button:focus-visible { outline-color: var(--paper); }
+
 .text-button {
   min-height: 44px;
   padding: 4px 8px;

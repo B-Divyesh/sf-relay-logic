@@ -21,8 +21,9 @@ This is an explicit single-mode treatment. A second dark theme would turn the ph
 | violet | `#7650a8` | square / D signal |
 | orange | `#a95313` | star / E signal |
 | danger | `#9b252d` | invalid move and failed test |
+| focus on charcoal | `#fffaf0` | keyboard focus ring for the dark demo banner |
 
-Signal identity is always repeated with a letter and shape. Color is never the only distinction. All text combinations meet WCAG AA; signal colors are used for large fills and outlines rather than body text on ivory.
+Signal identity is always repeated with a letter and shape. Color is never the only distinction. All text combinations meet WCAG AA; signal colors are used for large fills and outlines rather than body text on ivory. The demo banner uses an ivory 3 px focus ring against charcoal; its measured contrast is above 3:1.
 
 ## Type and spacing
 
