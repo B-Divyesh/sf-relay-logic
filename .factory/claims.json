@@ -1,0 +1,86 @@
+[
+  {
+    "id": "daily-seed",
+    "claim": "The shown UTC date always produces the same solver-checked board.",
+    "where": "game seed, README",
+    "test": "npm run test:unit -- --testNamePattern @claim:daily-seed",
+    "sandbox": "generate the same dated board twice; compare the full puzzle; count solutions"
+  },
+  {
+    "id": "fresh-daily",
+    "claim": "A new UTC date changes the daily topology.",
+    "where": "landing page, README",
+    "test": "npm run test:unit -- --testNamePattern @claim:fresh-daily",
+    "sandbox": "generate consecutive dates and compare seed, endpoints, and channels"
+  },
+  {
+    "id": "complete-run",
+    "claim": "All three sample boards can be solved through the daily-board handoff.",
+    "where": "demo, README",
+    "test": "npm run test:e2e -- --grep @claim:complete-run",
+    "sandbox": "fresh browser; solver-generated clicks; verify each end screen and the daily board"
+  },
+  {
+    "id": "free-no-account",
+    "claim": "The complete game is free and needs no account.",
+    "where": "landing facts, terms, README",
+    "test": "npm run test:e2e -- --grep @claim:free-no-account",
+    "sandbox": "finish all sample boards in a fresh browser without a form, login, or payment"
+  },
+  {
+    "id": "loss-end",
+    "claim": "Three failed board tests reach a loss screen and allow a same-seed restart.",
+    "where": "board fuse control, README",
+    "test": "npm run test:e2e -- --grep @claim:loss-end",
+    "sandbox": "fresh demo; fail three tests; assert loss dialog and same-seed restart"
+  },
+  {
+    "id": "invalid-recovery",
+    "claim": "An invalid placement leaves the board unchanged and the next valid relay works.",
+    "where": "game feedback, README",
+    "test": "npm run test:e2e -- --grep @claim:invalid-recovery",
+    "sandbox": "fresh demo; choose a disconnected socket; verify zero relays; place a valid relay"
+  },
+  {
+    "id": "rule-hint",
+    "claim": "A hint explains a rule without placing a relay or naming a cell.",
+    "where": "game hint control, README",
+    "test": "npm run test:e2e -- --grep @claim:rule-hint",
+    "sandbox": "fresh demo; compare paths before and after the hint; reject coordinates or directions"
+  },
+  {
+    "id": "reset-scope",
+    "claim": "Reset clears paths, moves, timer, and failed tests while preserving seed and sound.",
+    "where": "reset confirmation, README",
+    "test": "npm run test:e2e -- --grep @claim:reset-scope",
+    "sandbox": "change every per-run field and sound; reset; verify exact cleared and preserved state"
+  },
+  {
+    "id": "local-save",
+    "claim": "Current paths and the sound setting survive a browser reload.",
+    "where": "landing facts, privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:local-save",
+    "sandbox": "fresh demo; place a relay and enable sound; reload; verify both remain"
+  },
+  {
+    "id": "demo-isolation",
+    "claim": "Demo play uses separate browser storage and does not change real progress.",
+    "where": "demo banner, demo documentation",
+    "test": "npm run test:e2e -- --grep @claim:demo-isolation",
+    "sandbox": "preload a real marker; play demo; verify marker unchanged and demo key populated"
+  },
+  {
+    "id": "privacy-local",
+    "claim": "Play data is not sent to another origin.",
+    "where": "privacy page, landing privacy section",
+    "test": "npm run test:e2e -- --grep @claim:privacy-local",
+    "sandbox": "record every request during demo actions and require only the product origin"
+  },
+  {
+    "id": "keyboard-play",
+    "claim": "The board works with arrow keys and Enter.",
+    "where": "board keyboard note, README",
+    "test": "npm run test:e2e -- --grep @claim:keyboard-play",
+    "sandbox": "fresh demo; focus a source; select with Enter; move with an arrow; place with Enter"
+  }
+]

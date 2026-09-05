@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#ede5d5"/>
+  <path d="M0 80h1200M0 160h1200M0 240h1200M0 320h1200M0 400h1200M0 480h1200M0 560h1200M80 0v630M160 0v630M240 0v630M320 0v630M400 0v630M480 0v630M560 0v630M640 0v630M720 0v630M800 0v630M880 0v630M960 0v630M1040 0v630M1120 0v630" stroke="#826542" stroke-opacity=".09"/>
+  <g transform="translate(80 88)">
+    <rect width="470" height="454" rx="16" fill="#e4dbc9" stroke="#202321" stroke-width="5"/>
+    <rect x="28" y="28" width="414" height="398" rx="8" fill="#fffaf0" stroke="#826542" stroke-width="3"/>
+    <g fill="none" stroke="#826542" stroke-width="7" stroke-linecap="round" stroke-dasharray="10 10">
+      <path d="M78 80h100v100h100v100h100"/><path d="M78 180h100v100h100v100h100"/><path d="M78 380V280h100V180h100V80h100"/>
+    </g>
+    <g fill="none" stroke-width="14" stroke-linecap="round">
+      <path d="M78 80h100v100h100" stroke="#c52e3d"/><path d="M78 180h100v100h100v100h100" stroke="#1769aa"/><path d="M78 380V280h100" stroke="#237a52"/>
+    </g>
+    <g stroke="#202321" stroke-width="5">
+      <circle cx="78" cy="80" r="30" fill="#c52e3d"/><circle cx="278" cy="180" r="30" fill="#c52e3d"/>
+      <path d="M78 147l33 57H45z" fill="#1769aa"/><path d="M378 347l33 57h-66z" fill="#1769aa"/>
+      <path d="M78 345l35 35-35 35-35-35z" fill="#237a52"/><path d="M178 245l35 35-35 35-35-35z" fill="#237a52"/>
+    </g>
+  </g>
+  <g transform="translate(630 160)" fill="#202321">
+    <text x="0" y="0" font-family="Georgia,serif" font-size="42" font-weight="700" letter-spacing="3">RELAY LOGIC</text>
+    <text x="0" y="90" font-family="Georgia,serif" font-size="72" font-weight="700">Route colored</text>
+    <text x="0" y="170" font-family="Georgia,serif" font-size="72" font-weight="700">signals through</text>
+    <text x="0" y="250" font-family="Georgia,serif" font-size="72" font-weight="700">a circuit.</text>
+    <text x="0" y="330" font-family="Arial,sans-serif" font-size="27" fill="#4d524d">A free solver-checked board each day.</text>
+  </g>
+</svg>
