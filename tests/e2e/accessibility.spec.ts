@@ -9,10 +9,15 @@ test.beforeEach(async ({ page }) => {
 for (const path of ['/', '/demo', '/privacy', '/terms', '/not-a-page']) {
   test(`@a11y ${path} has a clear document structure and no serious axe findings`, async ({ page }) => {
     const errors: string[] = [];
+    const failedResponses: Array<{ url: string; status: number }> = [];
     page.on('console', (message) => {
-      if (message.type() === 'error') errors.push(message.text());
+      const isExpectedMissingPage = path === '/not-a-page' && /status of 404/i.test(message.text());
+      if (message.type() === 'error' && !isExpectedMissingPage) errors.push(message.text());
     });
     page.on('pageerror', (error) => errors.push(error.message));
+    page.on('response', (response) => {
+      if (response.status() >= 400) failedResponses.push({ url: response.url(), status: response.status() });
+    });
     await page.goto(path);
     await expect(page.locator('html')).toHaveAttribute('lang', 'en');
     await expect(page.locator('main')).toHaveCount(1);
@@ -22,6 +27,11 @@ for (const path of ['/', '/demo', '/privacy', '/terms', '/not-a-page']) {
     const serious = results.violations.filter((violation) => ['serious', 'critical'].includes(violation.impact ?? ''));
     expect(serious).toEqual([]);
     expect(errors).toEqual([]);
+    if (path === '/not-a-page' && failedResponses.length > 0) {
+      expect(failedResponses).toEqual([{ url: `${new URL(page.url()).origin}/not-a-page`, status: 404 }]);
+    } else {
+      expect(failedResponses).toEqual([]);
+    }
   });
 }
 

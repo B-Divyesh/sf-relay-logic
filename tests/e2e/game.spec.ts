@@ -17,7 +17,7 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('@claim:complete-run @claim:free-no-account completes all sample boards and reaches today without setup', async ({ page }) => {
+test('@claim:complete-run @claim:free-no-account completes all sample boards and reaches today without setup', async ({ page }, testInfo) => {
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
 
@@ -27,6 +27,7 @@ test('@claim:complete-run @claim:free-no-account completes all sample boards and
     const dialog = page.locator('[data-end-dialog]');
     await expect(dialog).toBeVisible();
     await expect(dialog.getByRole('heading', { name: 'Every signal is connected' })).toBeVisible();
+    if (step === 3) await page.screenshot({ path: testInfo.outputPath('solved-end.png'), fullPage: true });
     await dialog.getByRole('button', {
       name: step < 3 ? 'Open next sample board' : 'Play today’s board',
     }).click();
@@ -36,7 +37,7 @@ test('@claim:complete-run @claim:free-no-account completes all sample boards and
   await expect(page.locator('form')).toHaveCount(0);
 });
 
-test('@claim:loss-end reaches a loss screen and restarts the same board', async ({ page }) => {
+test('@claim:loss-end reaches a loss screen and restarts the same board', async ({ page }, testInfo) => {
   await page.goto('/demo');
   const seed = await page.locator('.seed code').textContent();
   for (let attempt = 0; attempt < 3; attempt += 1) {
@@ -44,6 +45,7 @@ test('@claim:loss-end reaches a loss screen and restarts the same board', async 
   }
   const dialog = page.locator('[data-end-dialog]');
   await expect(dialog.getByRole('heading', { name: 'This run ended' })).toBeVisible();
+  await page.screenshot({ path: testInfo.outputPath('loss-end.png'), fullPage: true });
   await dialog.getByRole('button', { name: 'Try the same board' }).click();
   await expect(page.locator('.seed code')).toHaveText(seed!);
   await expect(page.locator('.relay')).toHaveCount(0);
