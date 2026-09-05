@@ -6,6 +6,7 @@
 - Demo URL: https://relay-logic.sociobot.in/demo
 - Product type: static Vite and TypeScript browser game
 - Implementation SHA deployed: `2baa0eab3319529988826a02a402e67fc2b8a428`
+- Documentation and verification SHA: `fd621a6012b46a4870ed4ddc8791ff78e8ea7570` (not deployed; the repair release record)
 - Deployment: Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
