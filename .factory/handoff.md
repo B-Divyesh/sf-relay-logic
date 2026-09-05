@@ -5,21 +5,21 @@
 - Public URL: https://relay-logic.sociobot.in
 - Demo URL: https://relay-logic.sociobot.in/demo
 - Product type: static Vite and TypeScript browser game
-- Deployed implementation SHA: `b280c937ca3bee7a9bb9117709e7102095538281`
-- Documentation and verification SHA: `93e9f871d15baecf03bf2fc16df9161e9dff1989`
-- Runtime behavior source ancestor: `2baa0eab3319529988826a02a402e67fc2b8a428`
+- Deployed implementation SHA: `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8`
+- Documentation and verification SHA: recorded in the following release-record commit
+- Previous runtime behavior source ancestor: `2baa0eab3319529988826a02a402e67fc2b8a428`
 - Deployment: existing Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
-The deployed JavaScript reports build `b280c937`. Its SHA-256 matches the clean build exactly. Repair 3 changes the claim manifest and browser regression tests; the working runtime source from `2baa0ea` did not need a behavior change. The commit after the documentation SHA only records these release SHAs and is not a deployed implementation commit.
+The deployed page reports build `727e7d6c`. Production references the clean build's `index-Dz1qeejK.js` and `index-BuJPnqMq.css`. This repair is a scoped style and browser-test change; it does not alter puzzle generation, storage, or game rules.
 
-## Independent verification 4
+## Verification 4 finding — resolved
 
-Verdict: **FAIL**. The game and all 22 declared claims pass, but the keyboard focus outline on **Reset demo** and **Start for real** is `2.22:1` against the dark demo banner. The accessibility contract requires at least `3:1`. This is one minor finding with zero untested claims.
+Independent verification 4 originally failed on one minor issue: the blue keyboard focus outline on **Reset demo** and **Start for real** measured `2.22:1` against the dark demo banner. The game and all 22 declared claims already passed, with zero untested public claims.
 
-The reviewed implementation remains `b280c937ca3bee7a9bb9117709e7102095538281`; repair documentation is `de5bba0b673dd7ae774c598ba704ed36cfff049d`. The live footer now reports `e2b14c6c`, a later Graphify-only repository commit. A clean build with that label produced JavaScript and CSS byte-identical to live, so there is no later product change.
+Repair 4 scopes the existing 3 px ring to the dark banner and uses the ivory faceplate color there. On the live 390 px phone view, both actions now render `rgb(255, 250, 240)` against `rgb(32, 35, 33)`, a `15.25:1` contrast ratio. The new outcome test focuses both actions at 1440 px and 390 px, reads their rendered styles, and calculates the ratio; it does not assert stylesheet text.
 
-Independent checks used fresh 1440 × 1000 desktop and 412 × 839 phone contexts. The full sample sequence and daily board reached solved screens, the loss path restarted the same seed, reset preserved real keys, recovery paths worked, requests stayed same-origin, and both contexts measured 60.0 fps. `npm test` passed 8 unit and 28 browser tests; every claim command passed separately; `npm run build` created `dist/`. Lighthouse mobile measured 99/100/100/100 with 1,038 ms LCP and 0 CLS. Full evidence and the repair recommendation are in `.factory/verification-4.md`.
+The historical report remains in `.factory/verification-4.md`. Its finding is closed by deployed implementation `727e7d6`; all earlier verification findings are also closed.
 
 ## Repair 3
 
@@ -64,28 +64,28 @@ Results:
 
 - `npm ci`: 60 packages, 0 audit vulnerabilities.
 - Unit tests: 8 passed, including every 2026 daily seed and all learn boards.
-- Browser tests: 28 passed in Chromium 1.58.2.
+- Browser tests: 29 passed in Chromium 1.58.2.
 - Claims: all 22 commands in `.factory/claims.json` passed individually.
 - Build: `dist/` produced successfully.
 - JavaScript: 25.70 KB raw, 9.15 KB gzip.
-- CSS: 13.41 KB raw, 4.04 KB gzip.
+- CSS: 13.48 KB raw, 4.05 KB gzip.
 
 ## Live verification
 
-- The full 28-test browser suite passed against the HTTPS origin.
+- The full 29-test browser suite passed against the HTTPS origin.
 - Axe found no serious or critical issues on `/`, `/demo`, `/privacy`, `/terms`, or the designed 404.
 - `verify-url.sh` passed `/` and `/demo` with correct titles, `lang=en`, one h1, one main landmark, labeled controls, and no console errors.
 - Fresh 1440 × 1000 desktop and 412 × 839 phone contexts showed the job, solo-puzzle audience, sample action, three facts, and board before scrolling. The board began at 253 px and 575 px respectively.
 - Each fresh context opened the sample in one click, placed a relay, kept “Demo — sample data, nothing is saved” and “Sample board 1 of 3” visible, then reset both demo keys without changing seeded real keys.
 - The deterministic live run completed all three sample boards and the five-signal daily board, showed solved end screens, reached the three-failed-tests loss screen, and restarted the same seed.
 - The shipped suite covers normal, invalid, boundary, and reset paths. Recorded live checks also cover corrupt and blocked storage recovery.
-- Keyboard focus, dialog focus, route focus, 44 px phone targets, 200% text, reduced motion, touch input, and phone overflow checks pass.
+- Keyboard focus, dialog focus, route focus, 44 px phone targets, 200% text, reduced motion, touch input, and phone overflow checks pass. The two dark-banner actions have a 3 px, `15.25:1` focus ring on phone and desktop.
 - `/`, `/demo`, `/privacy`, `/terms`, `robots.txt`, and `sitemap.xml` return 200. An unknown route deliberately returns HTTP 404 with a designed route home.
 - Security headers include CSP with `frame-ancestors 'none'`, Referrer-Policy, and X-Content-Type-Options. The hashed JavaScript returns one-year immutable caching.
-- Lighthouse mobile: 100 performance, 100 accessibility, 100 best practices, 100 SEO. LCP 1,024 ms, CLS 0, total blocking time 12 ms, transfer size 15,426 bytes.
+- Lighthouse mobile: 99 performance, 100 accessibility, 100 best practices, 100 SEO. LCP 1,059 ms, CLS 0, total blocking time 137 ms, transfer size 15,427 bytes.
 - Request-animation-frame sampling over 120 frames measured 60.0 fps on fresh desktop and phone contexts.
 
-Evidence is in `/work/.evidence/relay-logic-repair-3/`. The verb-first, 69-character catalog description is copied to `/work/.evidence/catalog-description.txt`.
+Evidence is in `/work/.evidence/relay-logic-repair-4/`. The verb-first, 69-character catalog description is copied to `/work/.evidence/catalog-description.txt`.
 
 ## Earlier findings
 
@@ -94,6 +94,7 @@ Evidence is in `/work/.evidence/relay-logic-repair-3/`. The verb-first, 69-chara
 - Verification 2 missing sound and saved-data deletion claims: resolved; both dedicated commands pass locally and live.
 - Verification 2 footer targets below 44 px: resolved; live phone measurements are 56.1 × 44, 46.4 × 44, and 166.2 × 44 CSS px.
 - Verification 3’s four absent and three incomplete claims: resolved by the seven outcomes listed above.
+- Verification 4’s `2.22:1` demo-banner focus outline: resolved by the scoped ivory focus ring and its rendered-contrast regression check.
 
 ## Known limits
 
