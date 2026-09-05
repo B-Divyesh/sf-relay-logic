@@ -5,11 +5,11 @@
 - Public URL: https://relay-logic.sociobot.in
 - Demo URL: https://relay-logic.sociobot.in/demo
 - Product type: static Vite and TypeScript browser game
-- Implementation SHA deployed: `9c0bb2c2a50f15dd98d48d6d4ddcbe97476e9aed`
+- Implementation SHA deployed: `2baa0eab3319529988826a02a402e67fc2b8a428`
 - Deployment: Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
-The deployment was built after the implementation commit. The live footer reports build `9c0bb2c2`.
+The deployment was built after the implementation commit. The live footer reports build `2baa0ea`.
 
 ## What was built
 
@@ -30,7 +30,7 @@ The visual system is the original enamel switchboard described in `design.md`. A
 
 ## Verification
 
-Clean checkout at the implementation SHA:
+Repair 2 was verified from a clean installed checkout at the implementation SHA:
 
 ```sh
 npm ci
@@ -42,24 +42,38 @@ Results:
 
 - npm audit: 0 vulnerabilities.
 - Unit: 8 passing. This includes every 2026 daily seed and all learn boards.
-- Browser: 24 passing in Chromium 1.58.2.
-- Claims: all 16 commands in `claims.json` passed individually from a clean checkout.
-- Build: 25.70 KB JavaScript and 13.28 KB CSS before gzip.
-- Gzip: 9.15 KB JavaScript and 4.01 KB CSS.
+- Browser: 26 passing in Chromium 1.58.2.
+- Claims: all 18 commands in `claims.json` passed individually from a clean checkout.
+- Build: 25.70 KB JavaScript and 13.41 KB CSS before gzip.
+- Gzip: 9.15 KB JavaScript and 4.04 KB CSS.
 - Build output: `dist/`.
 
-Live checks:
+Repair 2 live checks:
 
 - `verify-url.sh` passed `/` and `/demo` with no console errors.
-- The full 24-test browser suite passed against the HTTPS site.
-- Fresh 1440 × 1000, 412 × 839 touch, and 390 × 844 layout contexts showed the job, audience, first action, and board before scrolling.
-- Both fresh contexts measured 60 animation frames per second over 120 frames.
+- The full 26-test browser suite passed against the HTTPS site.
+- Fresh 1440 × 1000 desktop and 412 × 839 Pixel 7 contexts showed the job “Route colored signals through a circuit,” the solo-puzzle audience, the “Try it with sample data” action, and the board before scrolling. The board began at 253 px on desktop and 575 px on phone.
+- In both fresh contexts, one click opened the demo. Its persistent banner and “Sample board 1 of 3” label remained visible. Reset demo cleared demo keys while a preloaded real marker remained unchanged.
+- The deterministic live browser run completed all three sample boards, captured the solved end screen, reached the three-failure loss screen, and restarted the same seed. Screenshots are in `/work/.evidence/relay-logic-repair-2/`.
+- Every footer link measured at least 44 × 44 CSS px at 390 px: Privacy 56.1 × 44, Terms 46.4 × 44, and Built by Param Factory 166.2 × 44.
 - Lighthouse mobile: performance 100, accessibility 100, best practices 100, SEO 100.
-- Lighthouse metrics: LCP 0.9 seconds, CLS 0, total blocking time 0 ms, transferred size 15 KiB.
+- Lighthouse metrics: LCP 901 ms, CLS 0, total blocking time 8.5 ms, transferred size 14,759 bytes.
 - `/`, `/demo`, `/privacy`, and `/terms` return 200.
 - An unknown route returns 404 and renders “This page is not connected.”
 - Hashed JavaScript returns `Cache-Control: public, max-age=31536000, immutable`.
 - The external Param Factory link returns 200.
+
+## Repair 2 disposition
+
+Independent verification 2 found two defects and one untested public claim. All are resolved in implementation `2baa0eab3319529988826a02a402e67fc2b8a428`:
+
+- **Sound after a move** is now claim `move-sound`. Its browser test replaces Web Audio with a recorded fixture, clears source-selection noise, then proves a valid relay starts audio only while the setting is on and is silent after it is turned off.
+- **Saved-data deletion** is now claim `clear-saved-data`. Its browser test seeds real and demo progress plus both sound-setting keys, invokes the Privacy control, and proves all four keys are removed.
+- **Footer link targets** now have a 44 px minimum width and height. The phone accessibility test measures their rendered rectangles rather than checking CSS text.
+
+No public behavior or claim is left untested. The previous static-asset 404 fix remains resolved: the current live asset `/assets/index-DtEfDcwH.js` returns 200, has immutable caching, and contains the deployed build label `2baa0ea`.
+
+Evidence for this repair is in `/work/.evidence/relay-logic-repair-2/`. `.factory/catalog-description.txt` remains the verb-first 69-character description and is copied to `/work/.evidence/catalog-description.txt`.
 
 Evidence is in `/work/.evidence/relay-logic-repair-1/`. It includes phone and desktop entry screenshots, solved and loss screens, URL reports, cold-browser measurements, and Lighthouse JSON. The catalog description is copied to `/work/.evidence/catalog-description.txt`.
 
