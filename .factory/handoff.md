@@ -13,6 +13,14 @@
 
 The deployed JavaScript reports build `b280c937`. Its SHA-256 matches the clean build exactly. Repair 3 changes the claim manifest and browser regression tests; the working runtime source from `2baa0ea` did not need a behavior change. The commit after the documentation SHA only records these release SHAs and is not a deployed implementation commit.
 
+## Independent verification 4
+
+Verdict: **FAIL**. The game and all 22 declared claims pass, but the keyboard focus outline on **Reset demo** and **Start for real** is `2.22:1` against the dark demo banner. The accessibility contract requires at least `3:1`. This is one minor finding with zero untested claims.
+
+The reviewed implementation remains `b280c937ca3bee7a9bb9117709e7102095538281`; repair documentation is `de5bba0b673dd7ae774c598ba704ed36cfff049d`. The live footer now reports `e2b14c6c`, a later Graphify-only repository commit. A clean build with that label produced JavaScript and CSS byte-identical to live, so there is no later product change.
+
+Independent checks used fresh 1440 × 1000 desktop and 412 × 839 phone contexts. The full sample sequence and daily board reached solved screens, the loss path restarted the same seed, reset preserved real keys, recovery paths worked, requests stayed same-origin, and both contexts measured 60.0 fps. `npm test` passed 8 unit and 28 browser tests; every claim command passed separately; `npm run build` created `dist/`. Lighthouse mobile measured 99/100/100/100 with 1,038 ms LCP and 0 CLS. Full evidence and the repair recommendation are in `.factory/verification-4.md`.
+
 ## Repair 3
 
 Independent verification 3 found seven public promises without complete outcome coverage. All are now covered:
