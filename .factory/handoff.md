@@ -73,3 +73,11 @@ The starting repository had no product implementation, handoff, or earlier revie
 - The brief's 75% learn completion and 30% daily attempt goals are not measured. The privacy-first build has no analytics.
 - Offline play is not promised. A network connection is needed to load the static app.
 - There is no account, multiplayer mode, leaderboard, puzzle editor, or paid tier. These are outside the brief.
+
+## Independent verification 1
+
+Independent verification on 2026-09-05 reviewed implementation `3ef2ff40b732ced3745ee0fd3122a39f6af0ad6e` and documentation/test SHA `dd0b80d5657b0fa6d725e70b4b44adb74e5c3174` against https://relay-logic.sociobot.in. The live footer reports later build label `7046d18c`; its diff from the implementation changes only handoff/test/Graphify files, not product source or deployment configuration.
+
+`npm ci`, `npm run build`, `npm test`, all 12 declared claim commands, the live 20-test suite, the worker URL verifier, fresh desktop and phone sessions, touch, keyboard, win/loss, privacy, headers, routes, and designed 404 checks passed. The earlier static-asset 404 issue remains resolved: the live hashed script is 200 and immutable-cached.
+
+Verification verdict: **FAIL**. Four public behavior claims have no `.factory/claims.json` entry or tagged regression test: touch input, stepping back along a path, Undo restoring the last valid action, and leaving demo mode without copying demo data. The behavior worked in the manual check, but the claims contract requires automated coverage. See `.factory/verification-1.md` for evidence and repair details.
