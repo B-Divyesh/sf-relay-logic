@@ -82,5 +82,33 @@
     "where": "board keyboard note, README",
     "test": "npm run test:e2e -- --grep @claim:keyboard-play",
     "sandbox": "fresh demo; focus a source; select with Enter; move with an arrow; place with Enter"
+  },
+  {
+    "id": "touch-play",
+    "claim": "The board works with touch input on a phone.",
+    "where": "README controls",
+    "test": "npm run test:e2e -- --grep @claim:touch-play",
+    "sandbox": "fresh mobile touch context; tap a source and its next linked socket; verify the relay is placed"
+  },
+  {
+    "id": "step-back",
+    "claim": "Selecting an earlier relay steps the active path back to that relay.",
+    "where": "README controls, game feedback",
+    "test": "npm run test:e2e -- --grep @claim:step-back",
+    "sandbox": "fresh demo; complete one signal path; select its previous relay; verify the exact shortened path and open signal"
+  },
+  {
+    "id": "undo-action",
+    "claim": "Undo restores the state before the last valid action.",
+    "where": "game control, README controls",
+    "test": "npm run test:e2e -- --grep @claim:undo-action",
+    "sandbox": "fresh demo; select a source and place one relay; undo; verify only that relay placement is reversed"
+  },
+  {
+    "id": "leave-demo",
+    "claim": "Starting for real deletes demo data without copying it into real progress.",
+    "where": "demo banner, demo documentation, README",
+    "test": "npm run test:e2e -- --grep @claim:leave-demo",
+    "sandbox": "preload real progress and settings; populate both demo keys; start for real; verify demo keys are deleted and real values are unchanged"
   }
 ]

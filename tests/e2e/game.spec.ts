@@ -1,4 +1,4 @@
-import { expect, test, type Page } from '@playwright/test';
+import { devices, expect, test, type Page } from '@playwright/test';
 import { getDemoPuzzle, solvePuzzle, type Puzzle } from '../../src/puzzle';
 
 async function solveBoard(page: Page, puzzle: Puzzle): Promise<void> {
@@ -175,4 +175,106 @@ test('@claim:keyboard-play operates the board with arrows and Enter', async ({ p
   await expect(page.locator(`[data-cell="${next}"]`)).toBeFocused();
   await page.keyboard.press('Enter');
   await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+});
+
+test('@claim:touch-play places a relay with touch input on a phone', async ({ browser }, testInfo) => {
+  const context = await browser.newContext({
+    ...devices['Pixel 7'],
+    baseURL: testInfo.project.use.baseURL as string,
+  });
+  const page = await context.newPage();
+  const puzzle = getDemoPuzzle(1);
+  const [source, next] = solvePuzzle(puzzle, 1).first![0];
+
+  await page.goto('/demo');
+  await page.locator(`[data-cell="${source}"]`).tap();
+  await page.locator(`[data-cell="${next}"]`).tap();
+
+  await expect(page.locator(`[data-cell="${source}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+  await expect(page.getByText('Relay placed.')).toBeVisible();
+  await context.close();
+});
+
+test('@claim:step-back restores the exact path ending at an earlier relay', async ({ page }) => {
+  const puzzle = getDemoPuzzle(1);
+  const path = solvePuzzle(puzzle, 1).first![0];
+  const earlierRelay = path.at(-2)!;
+  await page.goto('/demo');
+  await page.locator(`[data-cell="${path[0]}"]`).click();
+  for (const cell of path.slice(1)) await page.locator(`[data-cell="${cell}"]`).click();
+
+  await expect(page.locator('.legend-item.signal-0 .legend-state')).toHaveText('connected');
+  await page.locator(`[data-cell="${earlierRelay}"]`).click();
+
+  const storedPath = await page.evaluate(() => {
+    const progress = JSON.parse(localStorage.getItem('demo:relay-logic:progress')!);
+    return progress.game.paths[0] as number[];
+  });
+  expect(storedPath).toEqual(path.slice(0, -1));
+  await expect(page.locator(`[data-cell="${earlierRelay}"]`)).toHaveClass(/relay/);
+  await expect(page.locator('.legend-item.signal-0 .legend-state')).toHaveText('open');
+  await expect(page.getByText('Path stepped back. The cleared relays can be used again.')).toBeVisible();
+});
+
+test('@claim:undo-action restores the state before the last valid action', async ({ page }) => {
+  const puzzle = getDemoPuzzle(1);
+  const [source, next] = solvePuzzle(puzzle, 1).first![0];
+  await page.goto('/demo');
+  await page.locator(`[data-cell="${source}"]`).click();
+  await page.locator(`[data-cell="${next}"]`).click();
+  await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+
+  await page.getByRole('button', { name: 'Undo' }).click();
+
+  const storedGame = await page.evaluate(() => {
+    const progress = JSON.parse(localStorage.getItem('demo:relay-logic:progress')!);
+    return { path: progress.game.paths[0] as number[], activeSignal: progress.game.activeSignal as number | null };
+  });
+  expect(storedGame).toEqual({ path: [source], activeSignal: 0 });
+  await expect(page.locator(`[data-cell="${next}"]`)).not.toHaveClass(/relay/);
+  await expect(page.locator(`[data-cell="${source}"]`)).toHaveAttribute('aria-pressed', 'true');
+  await expect(page.getByText('Last action undone.')).toBeVisible();
+});
+
+test('@claim:leave-demo deletes demo data and preserves existing real data', async ({ page }) => {
+  const puzzle = getDemoPuzzle(1);
+  const [source, next] = solvePuzzle(puzzle, 1).first![0];
+  const existingReal = {
+    progress: '{"marker":"existing-real-progress"}',
+    settings: '{"sound":true}',
+  };
+  await page.goto('/');
+  await page.evaluate((real) => {
+    localStorage.setItem('relay-logic:progress', real.progress);
+    localStorage.setItem('relay-logic:settings', real.settings);
+  }, existingReal);
+  await page.goto('/demo');
+  await page.getByText('Settings').click();
+  await page.getByLabel('Sound after a move').check();
+  await page.locator(`[data-cell="${source}"]`).click();
+  await page.locator(`[data-cell="${next}"]`).click();
+  expect(await page.evaluate(() => ({
+    progress: localStorage.getItem('demo:relay-logic:progress'),
+    settings: localStorage.getItem('demo:relay-logic:settings'),
+  }))).toEqual({
+    progress: expect.stringContaining('demo-1'),
+    settings: '{"sound":true}',
+  });
+
+  await page.getByRole('button', { name: 'Start for real' }).click();
+
+  await expect(page).toHaveURL('/');
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toHaveCount(0);
+  expect(await page.evaluate(() => ({
+    demoProgress: localStorage.getItem('demo:relay-logic:progress'),
+    demoSettings: localStorage.getItem('demo:relay-logic:settings'),
+    realProgress: localStorage.getItem('relay-logic:progress'),
+    realSettings: localStorage.getItem('relay-logic:settings'),
+  }))).toEqual({
+    demoProgress: null,
+    demoSettings: null,
+    realProgress: existingReal.progress,
+    realSettings: existingReal.settings,
+  });
 });
