@@ -121,7 +121,7 @@
       "file_type": "code",
       "norm_label": "fixtureaudiocontext",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L144"
+      "source_location": "L169"
     },
     {
       "id": "tests_e2e_game_spec_fixturegain",
@@ -133,7 +133,7 @@
       "file_type": "code",
       "norm_label": "fixturegain",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L137"
+      "source_location": "L162"
     },
     {
       "id": "tests_e2e_game_spec_window",
@@ -181,7 +181,7 @@
       "file_type": "code",
       "norm_label": "fixtureoscillator",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L131"
+      "source_location": "L156"
     },
     {
       "id": "src_main_boardhtml",
@@ -643,7 +643,7 @@
       "file_type": "code",
       "norm_label": ".creategain()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L148"
+      "source_location": "L173"
     },
     {
       "id": "tests_e2e_game_spec_fixtureaudiocontext_createoscillator",
@@ -654,7 +654,7 @@
       "file_type": "code",
       "norm_label": ".createoscillator()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L147"
+      "source_location": "L172"
     },
     {
       "id": "tests_e2e_game_spec_fixturegain_connect",
@@ -665,7 +665,7 @@
       "file_type": "code",
       "norm_label": ".connect()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L142"
+      "source_location": "L167"
     },
     {
       "id": "tests_e2e_game_spec_solveboard",
@@ -896,7 +896,7 @@
       "file_type": "code",
       "norm_label": ".connect()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L133"
+      "source_location": "L158"
     },
     {
       "id": "tests_e2e_game_spec_fixtureoscillator_start",
@@ -907,7 +907,7 @@
       "file_type": "code",
       "norm_label": ".start()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L134"
+      "source_location": "L159"
     },
     {
       "id": "tests_e2e_game_spec_fixtureoscillator_stop",
@@ -918,7 +918,7 @@
       "file_type": "code",
       "norm_label": ".stop()",
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L135"
+      "source_location": "L160"
     },
     {
       "id": "vite_config_buildid",
@@ -3397,6 +3397,18 @@
     },
     {
       "source": "tests_e2e_game_spec",
+      "target": "src_puzzle_signals",
+      "relation": "imports",
+      "_origin": "ast",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "context": "import",
+      "source_file": "tests/e2e/game.spec.ts",
+      "source_location": "L2",
+      "weight": 1.0
+    },
+    {
+      "source": "tests_e2e_game_spec",
       "target": "src_puzzle_solvepuzzle",
       "relation": "imports",
       "_origin": "ast",
@@ -4708,7 +4720,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L131",
+      "source_location": "L156",
       "weight": 1.0
     },
     {
@@ -4719,7 +4731,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L137",
+      "source_location": "L162",
       "weight": 1.0
     },
     {
@@ -4730,7 +4742,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L144",
+      "source_location": "L169",
       "weight": 1.0
     },
     {
@@ -4939,7 +4951,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L147",
+      "source_location": "L172",
       "weight": 1.0
     },
     {
@@ -4950,7 +4962,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L148",
+      "source_location": "L173",
       "weight": 1.0
     },
     {
@@ -4961,7 +4973,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L142",
+      "source_location": "L167",
       "weight": 1.0
     },
     {
@@ -4972,7 +4984,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L133",
+      "source_location": "L158",
       "weight": 1.0
     },
     {
@@ -4983,7 +4995,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L134",
+      "source_location": "L159",
       "weight": 1.0
     },
     {
@@ -4994,7 +5006,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/e2e/game.spec.ts",
-      "source_location": "L135",
+      "source_location": "L160",
       "weight": 1.0
     },
     {
@@ -5023,5 +5035,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "5c02aba7adae6d6aea40747de4321bfc9e360150"
+  "built_at_commit": "e2b14c6c9c70d7ff28ab803c606787c8e62e794c"
 }
