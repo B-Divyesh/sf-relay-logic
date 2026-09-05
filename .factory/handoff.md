@@ -77,13 +77,13 @@ Results:
 - `verify-url.sh` passed `/` and `/demo` with correct titles, `lang=en`, one h1, one main landmark, labeled controls, and no console errors.
 - Fresh 1440 × 1000 desktop and 412 × 839 phone contexts showed the job, solo-puzzle audience, sample action, three facts, and board before scrolling. The board began at 253 px and 575 px respectively.
 - Each fresh context opened the sample in one click, placed a relay, kept “Demo — sample data, nothing is saved” and “Sample board 1 of 3” visible, then reset both demo keys without changing seeded real keys.
-- The deterministic live run completed all three sample boards and the five-signal daily board, showed solved end screens, reached the three-failed-tests loss screen, and restarted the same seed.
+- The shipped suite completed all three sample boards, reached the loss screen, and restarted the same seed. A direct post-deploy daily run for `2026-09-05` solved all five signals across 36 sockets in 31 moves and showed “Every signal is connected”.
 - The shipped suite covers normal, invalid, boundary, and reset paths. Recorded live checks also cover corrupt and blocked storage recovery.
 - Keyboard focus, dialog focus, route focus, 44 px phone targets, 200% text, reduced motion, touch input, and phone overflow checks pass. The two dark-banner actions have a 3 px, `15.25:1` focus ring on phone and desktop.
 - `/`, `/demo`, `/privacy`, `/terms`, `robots.txt`, and `sitemap.xml` return 200. An unknown route deliberately returns HTTP 404 with a designed route home.
 - Security headers include CSP with `frame-ancestors 'none'`, Referrer-Policy, and X-Content-Type-Options. The hashed JavaScript returns one-year immutable caching.
 - Lighthouse mobile: 99 performance, 100 accessibility, 100 best practices, 100 SEO. LCP 1,059 ms, CLS 0, total blocking time 137 ms, transfer size 15,427 bytes.
-- Request-animation-frame sampling over 120 frames measured 60.0 fps on fresh desktop and phone contexts.
+- A 120-frame post-deploy sample measured 59.5 fps on desktop and 60.0 fps on a 390 px phone context; the target is 60 fps.
 
 Evidence is in `/work/.evidence/relay-logic-repair-4/`. The verb-first, 69-character catalog description is copied to `/work/.evidence/catalog-description.txt`.
 
