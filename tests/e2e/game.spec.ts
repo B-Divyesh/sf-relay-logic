@@ -1,5 +1,5 @@
 import { devices, expect, test, type Page } from '@playwright/test';
-import { getDemoPuzzle, solvePuzzle, type Puzzle } from '../../src/puzzle';
+import { SIGNALS, getDemoPuzzle, solvePuzzle, type Puzzle } from '../../src/puzzle';
 
 declare global {
   interface Window {
@@ -23,12 +23,16 @@ test.beforeEach(async ({ page }) => {
   await page.evaluate(() => localStorage.clear());
 });
 
-test('@claim:complete-run @claim:free-no-account completes all sample boards and reaches today without setup', async ({ page }, testInfo) => {
+test('@claim:complete-run @claim:free-no-account @claim:ad-free @claim:demo-banner completes all sample boards without accounts or ads and keeps the demo label visible', async ({ page }, testInfo) => {
+  const requestOrigins = new Set<string>();
+  page.on('request', (request) => requestOrigins.add(new URL(request.url()).origin));
   await page.goto('/demo');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
 
   for (let step = 1; step <= 3; step += 1) {
+    await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
     await expect(page.getByText(`Sample board ${step} of 3`)).toBeVisible();
+    await expect(page.locator('iframe, [aria-label*="advertisement" i], [aria-label*="sponsored" i], [data-ad], ins.adsbygoogle')).toHaveCount(0);
     await solveBoard(page, getDemoPuzzle(step));
     const dialog = page.locator('[data-end-dialog]');
     await expect(dialog).toBeVisible();
@@ -40,7 +44,12 @@ test('@claim:complete-run @claim:free-no-account completes all sample boards and
   }
 
   await expect(page.getByText(/Daily board/)).toBeVisible();
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  await expect(page.locator('iframe, [aria-label*="advertisement" i], [aria-label*="sponsored" i], [data-ad], ins.adsbygoogle')).toHaveCount(0);
   await expect(page.locator('form')).toHaveCount(0);
+  await expect(page.locator('a[href*="checkout" i], a[href*="login" i], a[href*="signin" i], [aria-label*="payment" i]')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: /buy|pay|sign in|log in|subscribe/i })).toHaveCount(0);
+  expect([...requestOrigins]).toEqual([await page.evaluate(() => window.location.origin)]);
 });
 
 test('@claim:loss-end reaches a loss screen and restarts the same board', async ({ page }, testInfo) => {
@@ -111,16 +120,32 @@ test('@claim:reset-scope clears the run and preserves the seed and sound setting
   await expect(page.locator('#timer')).toHaveText('0:00');
 });
 
-test('@claim:local-save restores paths and settings after reload', async ({ page }) => {
-  const puzzle = getDemoPuzzle(1);
-  const next = solvePuzzle(puzzle, 1).first![0][1];
+test('@claim:local-save restores paths, learn step, timer, and settings after reload', async ({ page }) => {
   await page.goto('/demo');
   await page.getByText('Settings').click();
   await page.getByLabel('Sound after a move').check();
-  await page.locator(`[data-cell="${puzzle.pairs[0][0]}"]`).click();
+
+  await solveBoard(page, getDemoPuzzle(1));
+  await page.locator('[data-end-dialog]').getByRole('button', { name: 'Open next sample board' }).click();
+  await expect(page.getByText('Sample board 2 of 3')).toBeVisible();
+
+  const puzzle = getDemoPuzzle(2);
+  const [source, next] = solvePuzzle(puzzle, 1).first![0];
+  await expect.poll(async () => {
+    const [minutes, seconds] = (await page.locator('#timer').textContent())!.split(':').map(Number);
+    return minutes * 60 + seconds;
+  }).toBeGreaterThanOrEqual(1);
+  await page.locator(`[data-cell="${source}"]`).click();
   await page.locator(`[data-cell="${next}"]`).click();
+
   await page.reload();
+  await expect(page.getByText('Sample board 2 of 3')).toBeVisible();
   await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+  const restoredSeconds = await page.locator('#timer').evaluate((timer) => {
+    const [minutes, seconds] = timer.textContent!.split(':').map(Number);
+    return minutes * 60 + seconds;
+  });
+  expect(restoredSeconds).toBeGreaterThanOrEqual(1);
   await page.getByText('Settings').click();
   await expect(page.getByLabel('Sound after a move')).toBeChecked();
 });
@@ -180,62 +205,148 @@ test('@claim:move-sound plays an audio cue for an accepted move only while sound
   await expect.poll(() => page.evaluate(() => window.__relayLogicSoundLog?.length ?? 0)).toBe(startsWithSound);
 });
 
-test('@claim:demo-isolation changes demo storage without changing real progress', async ({ page }) => {
-  const puzzle = getDemoPuzzle(1);
-  const next = solvePuzzle(puzzle, 1).first![0][1];
+test('@claim:demo-isolation resets both demo keys to sample board 1 without changing real data', async ({ page }) => {
+  const existingReal = {
+    progress: '{"marker":"real-progress"}',
+    settings: '{"sound":true}',
+  };
   await page.goto('/');
-  await page.evaluate(() => localStorage.setItem('relay-logic:progress', '{"marker":"real-progress"}'));
+  await page.evaluate((real) => {
+    localStorage.setItem('relay-logic:progress', real.progress);
+    localStorage.setItem('relay-logic:settings', real.settings);
+  }, existingReal);
   await page.goto('/demo');
-  await page.locator(`[data-cell="${puzzle.pairs[0][0]}"]`).click();
-  await page.locator(`[data-cell="${next}"]`).click();
+  await page.getByText('Settings').click();
+  await page.getByLabel('Sound after a move').check();
+  await solveBoard(page, getDemoPuzzle(1));
+  await page.locator('[data-end-dialog]').getByRole('button', { name: 'Open next sample board' }).click();
+  await expect(page.getByText('Sample board 2 of 3')).toBeVisible();
+
   const stored = await page.evaluate(() => ({
-    real: localStorage.getItem('relay-logic:progress'),
-    demo: localStorage.getItem('demo:relay-logic:progress'),
+    realProgress: localStorage.getItem('relay-logic:progress'),
+    realSettings: localStorage.getItem('relay-logic:settings'),
+    demoProgress: localStorage.getItem('demo:relay-logic:progress'),
+    demoSettings: localStorage.getItem('demo:relay-logic:settings'),
   }));
-  expect(stored.real).toBe('{"marker":"real-progress"}');
-  expect(stored.demo).toContain('demo-1');
+  expect(stored).toEqual({
+    realProgress: existingReal.progress,
+    realSettings: existingReal.settings,
+    demoProgress: expect.stringContaining('demo-2'),
+    demoSettings: '{"sound":true}',
+  });
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
   await page.getByRole('button', { name: 'Reset demo' }).click();
   const afterReset = await page.evaluate(() => ({
-    real: localStorage.getItem('relay-logic:progress'),
-    demo: localStorage.getItem('demo:relay-logic:progress'),
+    realProgress: localStorage.getItem('relay-logic:progress'),
+    realSettings: localStorage.getItem('relay-logic:settings'),
+    demoProgress: localStorage.getItem('demo:relay-logic:progress'),
+    demoSettings: localStorage.getItem('demo:relay-logic:settings'),
   }));
-  expect(afterReset).toEqual({ real: '{"marker":"real-progress"}', demo: null });
+  expect(afterReset).toEqual({
+    realProgress: existingReal.progress,
+    realSettings: existingReal.settings,
+    demoProgress: null,
+    demoSettings: null,
+  });
+  await expect(page.getByText('Sample board 1 of 3')).toBeVisible();
+  await expect(page.locator('.relay')).toHaveCount(0);
+  await expect(page.locator('#timer')).toHaveText('0:00');
+  await page.getByText('Settings').click();
+  await expect(page.getByLabel('Sound after a move')).not.toBeChecked();
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
 });
 
 test('@claim:privacy-local sends no play data to another origin', async ({ page }) => {
-  const origins = new Set<string>();
-  page.on('request', (request) => origins.add(new URL(request.url()).origin));
+  const requests: string[] = [];
+  page.on('request', (request) => requests.push(request.url()));
   await page.goto('/demo');
+  await page.waitForLoadState('networkidle');
+  expect(new Set(requests.map((url) => new URL(url).origin))).toEqual(new Set([await page.evaluate(() => window.location.origin)]));
+  requests.length = 0;
   await page.getByRole('button', { name: 'Explain one rule' }).click();
   await page.getByRole('button', { name: 'Test circuit' }).click();
-  const productOrigin = await page.evaluate(() => window.location.origin);
-  expect([...origins]).toEqual([productOrigin]);
+  await page.waitForTimeout(100);
+  expect(requests).toEqual([]);
+  expect(await page.context().cookies()).toEqual([]);
 });
 
-test('@claim:keyboard-play operates the board with arrows and Enter', async ({ page }) => {
+test('@claim:keyboard-play reaches the board with Tab and places relays with Space, arrows, and Enter', async ({ page }) => {
   const puzzle = getDemoPuzzle(1);
   const solution = solvePuzzle(puzzle, 1).first![0];
   const source = solution[0];
   const next = solution[1];
   await page.goto('/demo');
+
+  let reachedSourceWithTab = false;
+  for (let press = 0; press < 40; press += 1) {
+    await page.keyboard.press('Tab');
+    const focusedCell = await page.evaluate(() => (document.activeElement as HTMLElement).dataset.cell);
+    if (focusedCell === String(source)) {
+      reachedSourceWithTab = true;
+      break;
+    }
+  }
+  expect(reachedSourceWithTab).toBe(true);
+  await page.keyboard.press('Space');
+  await expect(page.locator(`[data-cell="${source}"]`)).toHaveAttribute('aria-pressed', 'true');
+
+  const keyBetween = (from: number, to: number): string => {
+    const fromRow = Math.floor(from / puzzle.size);
+    const fromColumn = from % puzzle.size;
+    const toRow = Math.floor(to / puzzle.size);
+    const toColumn = to % puzzle.size;
+    return toRow < fromRow ? 'ArrowUp' : toRow > fromRow ? 'ArrowDown' : toColumn < fromColumn ? 'ArrowLeft' : 'ArrowRight';
+  };
+  await page.keyboard.press(keyBetween(source, next));
+  await expect(page.locator(`[data-cell="${next}"]`)).toBeFocused();
+  await page.keyboard.press('Space');
+  await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+
+  const third = solution[2];
+  await page.keyboard.press(keyBetween(next, third));
+  await expect(page.locator(`[data-cell="${third}"]`)).toBeFocused();
+  await page.keyboard.press('Enter');
+  await expect(page.locator(`[data-cell="${third}"]`)).toHaveClass(/relay/);
+
   const leftBoundary = page.locator('[data-cell="0"]');
   await leftBoundary.focus();
   await page.keyboard.press('ArrowLeft');
   await expect(leftBoundary).toBeFocused();
-  await page.locator(`[data-cell="${source}"]`).focus();
-  await page.keyboard.press('Enter');
+});
 
-  const sourceRow = Math.floor(source / puzzle.size);
-  const sourceColumn = source % puzzle.size;
-  const nextRow = Math.floor(next / puzzle.size);
-  const nextColumn = next % puzzle.size;
-  const key = nextRow < sourceRow ? 'ArrowUp' : nextRow > sourceRow ? 'ArrowDown' : nextColumn < sourceColumn ? 'ArrowLeft' : 'ArrowRight';
-  await page.keyboard.press(key);
-  await expect(page.locator(`[data-cell="${next}"]`)).toBeFocused();
-  await page.keyboard.press('Enter');
-  await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
+test('@claim:signal-redundancy pairs every signal color with a visible letter and shape', async ({ page }) => {
+  await page.goto('/');
+  await page.getByRole('button', { name: 'Play today’s board' }).click();
+  await expect(page.getByText(/Daily board/)).toBeVisible();
+
+  const sourceColors: string[] = [];
+  const legendColors: string[] = [];
+  for (const signal of SIGNALS) {
+    const source = page.getByRole('button', { name: new RegExp(`^${signal.letter} ${signal.shape} source,`) });
+    const receiver = page.getByRole('button', { name: new RegExp(`^${signal.letter} ${signal.shape} receiver,`) });
+    await expect(source).toHaveCount(1);
+    await expect(receiver).toHaveCount(1);
+    await expect(source.locator('.signal-letter')).toHaveText(signal.letter);
+    await expect(source.locator('.signal-glyph')).toHaveText(signal.glyph);
+    await expect(receiver.locator('.signal-letter')).toHaveText(signal.letter);
+    await expect(receiver.locator('.signal-glyph')).toHaveText(signal.glyph);
+    await expect(page.locator('.legend-item', { hasText: `${signal.letter} · ${signal.shape}` })).toHaveCount(1);
+    sourceColors.push(await source.evaluate((element) => getComputedStyle(element).backgroundColor));
+    legendColors.push(await page.locator(`.legend-item:has-text("${signal.letter} · ${signal.shape}") .legend-glyph`).evaluate((element) => getComputedStyle(element).color));
+  }
+  expect(new Set(sourceColors).size).toBe(SIGNALS.length);
+  expect(new Set(legendColors).size).toBe(SIGNALS.length);
+});
+
+test('@claim:count-up-timer starts at zero and counts up without ending play', async ({ page }) => {
+  await page.goto('/demo');
+  await expect(page.locator('#timer')).toHaveText('0:00');
+  await expect.poll(async () => {
+    const [minutes, seconds] = (await page.locator('#timer').textContent())!.split(':').map(Number);
+    return minutes * 60 + seconds;
+  }).toBeGreaterThanOrEqual(1);
+  await expect(page.locator('[data-end-dialog]')).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Test circuit' })).toBeEnabled();
 });
 
 test('@claim:touch-play places a relay with touch input on a phone', async ({ browser }, testInfo) => {

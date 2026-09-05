@@ -28,6 +28,13 @@
     "sandbox": "finish all sample boards in a fresh browser without a form, login, or payment"
   },
   {
+    "id": "ad-free",
+    "claim": "The complete game has no ads.",
+    "where": "landing facts, privacy, README",
+    "test": "npm run test:e2e -- --grep @claim:ad-free",
+    "sandbox": "finish all sample boards; reject ad surfaces, embedded frames, and requests to any other origin"
+  },
+  {
     "id": "loss-end",
     "claim": "Three failed board tests reach a loss screen and allow a same-seed restart.",
     "where": "board fuse control, README",
@@ -57,10 +64,10 @@
   },
   {
     "id": "local-save",
-    "claim": "Current paths and the sound setting survive a browser reload.",
+    "claim": "Current paths, learn-board step, timer, and sound setting survive a browser reload.",
     "where": "landing facts, privacy, README",
     "test": "npm run test:e2e -- --grep @claim:local-save",
-    "sandbox": "fresh demo; place a relay and enable sound; reload; verify both remain"
+    "sandbox": "reach sample board 2; run the timer, place a relay, and enable sound; reload; verify every value remains visible"
   },
   {
     "id": "move-sound",
@@ -71,24 +78,45 @@
   },
   {
     "id": "demo-isolation",
-    "claim": "Demo play uses separate browser storage and does not change real progress.",
+    "claim": "Demo play uses separate storage; Reset demo deletes both demo keys, restores sample board 1, and leaves real data unchanged.",
     "where": "demo banner, demo documentation",
     "test": "npm run test:e2e -- --grep @claim:demo-isolation",
-    "sandbox": "preload a real marker; play demo; verify marker unchanged and demo key populated"
+    "sandbox": "preload real progress and settings; reach sample board 2 with demo sound on; reset; verify both demo keys are deleted, sample 1 is restored, and real data is unchanged"
   },
   {
     "id": "privacy-local",
-    "claim": "Play data is not sent to another origin.",
+    "claim": "Play data stays in this browser, and the game sets no tracking cookie or action request.",
     "where": "privacy page, landing privacy section",
     "test": "npm run test:e2e -- --grep @claim:privacy-local",
-    "sandbox": "record every request during demo actions and require only the product origin"
+    "sandbox": "allow same-origin static files to load; record demo actions; require no action requests and no cookies"
   },
   {
     "id": "keyboard-play",
-    "claim": "The board works with arrow keys and Enter.",
+    "claim": "Tab reaches a socket; Space, arrow keys, and Enter operate the board.",
     "where": "board keyboard note, README",
     "test": "npm run test:e2e -- --grep @claim:keyboard-play",
-    "sandbox": "fresh demo; focus a source; select with Enter; move with an arrow; place with Enter"
+    "sandbox": "fresh demo; Tab from page entry to a source; select and place with Space; move with arrows; place with Enter"
+  },
+  {
+    "id": "signal-redundancy",
+    "claim": "Every signal color is paired with a visible letter and shape.",
+    "where": "daily board, README",
+    "test": "npm run test:e2e -- --grep @claim:signal-redundancy",
+    "sandbox": "open the five-signal daily board; verify distinct rendered colors and matching visible letters and shapes on endpoints and legend"
+  },
+  {
+    "id": "count-up-timer",
+    "claim": "The board timer counts up from zero instead of counting down.",
+    "where": "board timer, README",
+    "test": "npm run test:e2e -- --grep @claim:count-up-timer",
+    "sandbox": "fresh demo; observe zero, then a larger elapsed time while the board remains playable"
+  },
+  {
+    "id": "demo-banner",
+    "claim": "The demo label remains visible through every sample-board change and the daily-board handoff.",
+    "where": "demo banner, README",
+    "test": "npm run test:e2e -- --grep @claim:demo-banner",
+    "sandbox": "complete all three sample boards; verify the demo label before each board and after opening the daily board"
   },
   {
     "id": "touch-play",
