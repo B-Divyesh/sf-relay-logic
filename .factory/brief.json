@@ -1,0 +1,37 @@
+{
+  "slug": "relay-logic",
+  "title": "Relay Logic",
+  "territory": "games-creative",
+  "user": "Solo logic-puzzle players who want a fresh daily puzzle that teaches its rule set by play instead of making them decode a tutorial.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/49448164",
+      "date": "2026-08-26",
+      "quote_or_summary": "Witstep launches free no-signup daily math and logic patterns, confirming current browser appetite for daily non-word puzzles."
+    },
+    {
+      "url": "https://hn.algolia.com/api/v1/items/49296747",
+      "date": "2026-08-14",
+      "quote_or_summary": "Gridmino offers ad-free daily logic variants including Dicesweep and Kakumino, showing makers are actively searching for twists on established logic games."
+    },
+    {
+      "url": "https://witstep.vercel.app",
+      "date": "2026-08-26",
+      "quote_or_summary": "Fetched Witstep page is titled 'Think in steps,' corroborating a live daily logic-puzzle browser category."
+    }
+  ],
+  "recurrence": "Two new August 2026 launches target free daily logic puzzles, a clear pattern of demand and a signal that differentiation must be in onboarding rather than another clone.",
+  "current_workaround": "Learn a dense rule sheet for a niche puzzle or play familiar Minesweeper/Kakuro variants.",
+  "incumbents_and_gap": "Witstep and Gridmino provide collections and variants; a single progressive puzzle can make deduction approachable through reversible micro-actions.",
+  "smallest_useful_product": "A daily circuit-routing board with 3-5 colored signals. Players place one relay at a time; immediate local feedback teaches the constraint without revealing the solution. Runs are 3-8 minutes and daily seeds change topology. Non-goals: electricity education claims, puzzle editor, timed ads, or account streaks.",
+  "success_measure": "75% of new players finish the three-board learn-by-doing sequence and 30% attempt the next daily board.",
+  "artifact_class": "browser-game",
+  "monetization": "free \u2014 an ad-free daily page is the credible alternative to cluttered puzzle portals.",
+  "constraints": "Every generated board must be solver-checked for a unique solution and accessible with keyboard/colorblind shapes.",
+  "est_build_effort": "M",
+  "scale": "small (default)",
+  "why_distinct": "The game teaches one novel logic system through feedback rather than selling a pile of renamed classics.",
+  "confidence": 4,
+  "state": "RESEARCHED",
+  "research_run": "research-browser-games-0901-204325-2"
+}
