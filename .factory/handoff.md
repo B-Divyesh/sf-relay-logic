@@ -6,11 +6,12 @@
 - Demo URL: https://relay-logic.sociobot.in/demo
 - Product type: static Vite and TypeScript browser game
 - Deployed implementation SHA: `b280c937ca3bee7a9bb9117709e7102095538281`
+- Documentation and verification SHA: `93e9f871d15baecf03bf2fc16df9161e9dff1989`
 - Runtime behavior source ancestor: `2baa0eab3319529988826a02a402e67fc2b8a428`
 - Deployment: existing Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
-The deployed JavaScript reports build `b280c937`. Its SHA-256 matches the clean build exactly. Repair 3 changes the claim manifest and browser regression tests; the working runtime source from `2baa0ea` did not need a behavior change. Handoff and later report commits are not deployed implementation commits.
+The deployed JavaScript reports build `b280c937`. Its SHA-256 matches the clean build exactly. Repair 3 changes the claim manifest and browser regression tests; the working runtime source from `2baa0ea` did not need a behavior change. The commit after the documentation SHA only records these release SHAs and is not a deployed implementation commit.
 
 ## Repair 3
 
