@@ -134,6 +134,13 @@ test('@claim:demo-isolation changes demo storage without changing real progress'
   expect(stored.real).toBe('{"marker":"real-progress"}');
   expect(stored.demo).toContain('demo-1');
   await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
+  await page.getByRole('button', { name: 'Reset demo' }).click();
+  const afterReset = await page.evaluate(() => ({
+    real: localStorage.getItem('relay-logic:progress'),
+    demo: localStorage.getItem('demo:relay-logic:progress'),
+  }));
+  expect(afterReset).toEqual({ real: '{"marker":"real-progress"}', demo: null });
+  await expect(page.getByText('Demo — sample data, nothing is saved')).toBeVisible();
 });
 
 test('@claim:privacy-local sends no play data to another origin', async ({ page }) => {
