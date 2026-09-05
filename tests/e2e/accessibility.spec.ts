@@ -49,6 +49,22 @@ test('@a11y phone layout keeps the board and controls usable at 390px', async ({
   expect(board?.y).toBeLessThan(844);
 });
 
+test('@a11y phone footer links have 44px hit areas', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/demo');
+  const sizes = await page.locator('.site-footer nav a').evaluateAll((links) =>
+    links.map((link) => {
+      const rect = (link as HTMLElement).getBoundingClientRect();
+      return { name: link.textContent?.trim(), width: rect.width, height: rect.height };
+    }),
+  );
+  expect(sizes).toHaveLength(3);
+  for (const link of sizes) {
+    expect(link.width, `${link.name} width`).toBeGreaterThanOrEqual(44);
+    expect(link.height, `${link.name} height`).toBeGreaterThanOrEqual(44);
+  }
+});
+
 test('@a11y reduced motion removes visible transition duration', async ({ browser }) => {
   const context = await browser.newContext({ reducedMotion: 'reduce' });
   const page = await context.newPage();
@@ -90,13 +106,25 @@ test('all internal links open a designed page', async ({ page, request }) => {
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('This page is not connected');
 });
 
-test('privacy control deletes real and demo storage', async ({ page }) => {
+test('@claim:clear-saved-data privacy control deletes real and demo progress plus sound settings', async ({ page }) => {
   await page.goto('/privacy');
   await page.evaluate(() => {
     localStorage.setItem('relay-logic:progress', 'real');
+    localStorage.setItem('relay-logic:settings', '{"sound":true}');
     localStorage.setItem('demo:relay-logic:progress', 'demo');
+    localStorage.setItem('demo:relay-logic:settings', '{"sound":false}');
   });
   await page.getByRole('button', { name: 'Clear saved game data' }).click();
   await expect(page.getByText('Saved game data was cleared from this browser.')).toBeVisible();
-  expect(await page.evaluate(() => Object.keys(localStorage))).toEqual([]);
+  expect(await page.evaluate(() => ({
+    realProgress: localStorage.getItem('relay-logic:progress'),
+    realSettings: localStorage.getItem('relay-logic:settings'),
+    demoProgress: localStorage.getItem('demo:relay-logic:progress'),
+    demoSettings: localStorage.getItem('demo:relay-logic:settings'),
+  }))).toEqual({
+    realProgress: null,
+    realSettings: null,
+    demoProgress: null,
+    demoSettings: null,
+  });
 });

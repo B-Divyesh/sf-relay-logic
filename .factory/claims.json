@@ -63,6 +63,13 @@
     "sandbox": "fresh demo; place a relay and enable sound; reload; verify both remain"
   },
   {
+    "id": "move-sound",
+    "claim": "With sound on, an accepted move produces audio feedback; with sound off, it stays silent.",
+    "where": "Sound after a move setting",
+    "test": "npm run test:e2e -- --grep @claim:move-sound",
+    "sandbox": "fresh demo; replace Web Audio with a recorded fixture; make accepted moves with sound on and off; compare audio starts"
+  },
+  {
     "id": "demo-isolation",
     "claim": "Demo play uses separate browser storage and does not change real progress.",
     "where": "demo banner, demo documentation",
@@ -110,5 +117,12 @@
     "where": "demo banner, demo documentation, README",
     "test": "npm run test:e2e -- --grep @claim:leave-demo",
     "sandbox": "preload real progress and settings; populate both demo keys; start for real; verify demo keys are deleted and real values are unchanged"
+  },
+  {
+    "id": "clear-saved-data",
+    "claim": "Clear saved game data deletes real and demo progress plus sound settings from this browser.",
+    "where": "Privacy page",
+    "test": "npm run test:e2e -- --grep @claim:clear-saved-data",
+    "sandbox": "fresh privacy page; seed all four real and demo storage keys; clear saved data; verify every seeded key is gone"
   }
 ]

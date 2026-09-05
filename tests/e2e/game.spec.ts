@@ -1,6 +1,12 @@
 import { devices, expect, test, type Page } from '@playwright/test';
 import { getDemoPuzzle, solvePuzzle, type Puzzle } from '../../src/puzzle';
 
+declare global {
+  interface Window {
+    __relayLogicSoundLog?: string[];
+  }
+}
+
 async function solveBoard(page: Page, puzzle: Puzzle): Promise<void> {
   const solution = solvePuzzle(puzzle, 1).first;
   expect(solution).not.toBeNull();
@@ -117,6 +123,61 @@ test('@claim:local-save restores paths and settings after reload', async ({ page
   await expect(page.locator(`[data-cell="${next}"]`)).toHaveClass(/relay/);
   await page.getByText('Settings').click();
   await expect(page.getByLabel('Sound after a move')).toBeChecked();
+});
+
+test('@claim:move-sound plays an audio cue for an accepted move only while sound is on', async ({ page }) => {
+  await page.addInitScript(() => {
+    const soundLog: string[] = [];
+    class FixtureOscillator {
+      frequency = { value: 0 };
+      connect(): this { return this; }
+      start(): void { soundLog.push('start'); }
+      stop(): void {}
+    }
+    class FixtureGain {
+      gain = {
+        setValueAtTime: () => {},
+        exponentialRampToValueAtTime: () => {},
+      };
+      connect(): this { return this; }
+    }
+    class FixtureAudioContext {
+      currentTime = 0;
+      destination = {};
+      createOscillator(): FixtureOscillator { return new FixtureOscillator(); }
+      createGain(): FixtureGain { return new FixtureGain(); }
+    }
+    Object.defineProperty(window, 'AudioContext', {
+      configurable: true,
+      writable: true,
+      value: FixtureAudioContext,
+    });
+    Object.defineProperty(window, '__relayLogicSoundLog', {
+      configurable: true,
+      value: soundLog,
+    });
+  });
+
+  const puzzle = getDemoPuzzle(1);
+  const path = solvePuzzle(puzzle, 1).first![0];
+  await page.goto('/demo');
+  await page.getByText('Settings').click();
+  await page.getByLabel('Sound after a move').check();
+  await page.locator(`[data-cell="${path[0]}"]`).click();
+  await page.evaluate(() => {
+    if (window.__relayLogicSoundLog) window.__relayLogicSoundLog.length = 0;
+  });
+  await page.locator(`[data-cell="${path[1]}"]`).click();
+  await expect(page.locator(`[data-cell="${path[1]}"]`)).toHaveClass(/relay/);
+
+  const startsWithSound = await page.evaluate(() => window.__relayLogicSoundLog?.length ?? 0);
+  expect(startsWithSound).toBeGreaterThan(0);
+
+  await page.getByText('Settings').click();
+  await page.getByLabel('Sound after a move').uncheck();
+  await page.locator(`[data-cell="${path[2]}"]`).click();
+  await expect(page.locator(`[data-cell="${path[2]}"]`)).toHaveClass(/relay/);
+  await expect.poll(() => page.evaluate(() => window.__relayLogicSoundLog?.length ?? 0)).toBe(startsWithSound);
 });
 
 test('@claim:demo-isolation changes demo storage without changing real progress', async ({ page }) => {

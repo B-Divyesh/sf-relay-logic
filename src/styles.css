@@ -459,6 +459,14 @@ h3 { font-size: 1rem; letter-spacing: 0.03em; }
 }
 
 .site-footer p { margin: 0; }
+.site-footer nav a {
+  min-width: 44px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 2px;
+}
 .site-footer .build { grid-column: 1 / -1; color: var(--muted); font-size: 0.78rem; }
 
 .text-page,
