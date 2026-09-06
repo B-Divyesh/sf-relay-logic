@@ -1,97 +1,97 @@
 {
   ".factory/brief.json": {
-    "mtime": 1788651052.182838,
-    "seen": 1788651052.8031743,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292856,
     "ast_hash": "17706acd372fcb8311c373a7aa2b2113",
     "semantic_hash": "17706acd372fcb8311c373a7aa2b2113"
   },
   ".factory/claims.json": {
-    "mtime": 1788651052.182838,
-    "seen": 1788651052.8031783,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292894,
     "ast_hash": "e8f6453eb896a95364c2ba8a8d577366",
     "semantic_hash": "e8f6453eb896a95364c2ba8a8d577366"
   },
   "package.json": {
-    "mtime": 1788651052.182838,
-    "seen": 1788651052.80318,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292913,
     "ast_hash": "305c684925c8ffe4f4a38c216733ab11",
     "semantic_hash": "305c684925c8ffe4f4a38c216733ab11"
   },
   "playwright.config.ts": {
-    "mtime": 1788651052.182838,
-    "seen": 1788651052.8031812,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292923,
     "ast_hash": "031c0457e8bf40dc8f51ebd8cd6c24b2",
     "semantic_hash": "031c0457e8bf40dc8f51ebd8cd6c24b2"
   },
   "public/staticwebapp.config.json": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031821,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292935,
     "ast_hash": "e230fa536553c73cb7a56f8941faea6b",
     "semantic_hash": "e230fa536553c73cb7a56f8941faea6b"
   },
   "src/game.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.803183,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292947,
     "ast_hash": "109f93b8db85238d9a7d29c66422d0de",
     "semantic_hash": "109f93b8db85238d9a7d29c66422d0de"
   },
   "src/main.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.803184,
+    "mtime": 1788652365.1004672,
+    "seen": 1788652365.8292959,
     "ast_hash": "550f56da39a6a2923ff09b36147f333d",
     "semantic_hash": "550f56da39a6a2923ff09b36147f333d"
   },
   "src/puzzle.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031852,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8292966,
     "ast_hash": "d14538514b120936ab2e6af81ebf8024",
     "semantic_hash": "d14538514b120936ab2e6af81ebf8024"
   },
   "src/vite-env.d.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031867,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8292978,
     "ast_hash": "563baaeab2ede4328278ee1d654842b5",
     "semantic_hash": "563baaeab2ede4328278ee1d654842b5"
   },
   "tests/e2e/accessibility.spec.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031876,
-    "ast_hash": "3278edcd659c65392f1288703722f354",
-    "semantic_hash": "3278edcd659c65392f1288703722f354"
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8292987,
+    "ast_hash": "b187b5a7311cb42c93d3b6123caa6e66",
+    "semantic_hash": "b187b5a7311cb42c93d3b6123caa6e66"
   },
   "tests/e2e/game.spec.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031888,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8292997,
     "ast_hash": "06969af9168ac8a37885b278d0db6201",
     "semantic_hash": "06969af9168ac8a37885b278d0db6201"
   },
   "tests/unit/game.test.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031898,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8293006,
     "ast_hash": "332e0a9cfc34d11259bd4553b4dfa9f7",
     "semantic_hash": "332e0a9cfc34d11259bd4553b4dfa9f7"
   },
   "tests/unit/puzzle.test.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031907,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8293018,
     "ast_hash": "5fc9a230e41108bfa1886b47ec645967",
     "semantic_hash": "5fc9a230e41108bfa1886b47ec645967"
   },
   "tsconfig.json": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031917,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8293025,
     "ast_hash": "5a0ceed36fac5e34048f853688e2b619",
     "semantic_hash": "5a0ceed36fac5e34048f853688e2b619"
   },
   "vite.config.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031926,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8293035,
     "ast_hash": "7be0795b920f247833f705d150acc23a",
     "semantic_hash": "7be0795b920f247833f705d150acc23a"
   },
   "vitest.config.ts": {
-    "mtime": 1788651052.186838,
-    "seen": 1788651052.8031933,
+    "mtime": 1788652365.1044672,
+    "seen": 1788652365.8293042,
     "ast_hash": "1172d13ead1d20ff0771261a3337455b",
     "semantic_hash": "1172d13ead1d20ff0771261a3337455b"
   }
