@@ -13,6 +13,18 @@
 
 At the repair deployment, the page reported build `727e7d6c` and referenced `index-Dz1qeejK.js` with `index-BuJPnqMq.css`. This repair was a scoped style and browser-test change; it did not alter puzzle generation, storage, or game rules. Review 1 records the later report-only live build label below.
 
+## Verification 6 — PASS
+
+Verification 6 broadened the released candidate to Playwright 1.58.2 Chromium `145.0.7632.6`, Firefox `146.0.1`, and WebKit `26.0`. It reviewed implementation `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8` from documentation baseline `036caf134d8469d28ac9b77760a40c592e2514a7`. The live footer remains `803b5efb`; a clean build with that label produced JavaScript and CSS byte-identical to live.
+
+The result is **PASS** with zero findings and zero untested public claims. The clean checkout passed `npm ci`, 8 unit tests, 29 Chromium browser tests, `npm run build`, and all 22 declared claim commands separately. The 29 live checks passed in Chromium. Firefox passed 28 directly plus a Firefox-compatible replacement for Playwright's unsupported Pixel 7 `isMobile` option. WebKit passed 28 directly plus the unchanged complete-run test with a longer timeout.
+
+Recorded runs in all three engines solved the `2026-09-06` daily board, seed `4033961918`, across 36 sockets in 31 moves and reached the actual win screen. Separate 390 × 844 touch runs started native audio, restored saved progress after reload, reached the loss screen, and restarted the same seed. Corrupt and blocked storage recovery also passed in each engine.
+
+Firefox's worker has no audio output and kept its native context suspended after scheduling the oscillator. WebKit's high-DPI Linux software renderer cannot represent device FPS. These worker limits are separate from product results; no public engine version or frame-rate promise exists. Chromium measured 59.5 FPS on desktop and phone, and Firefox measured 59.0/60.0 FPS. Lighthouse mobile scored 98 performance and 100 in accessibility, best practices, and SEO.
+
+The full report is `.factory/verification-6.md`. Evidence is under `/work/.evidence/relay-logic-verify-6/`, with the factory copies at `/work/.evidence/qa-report.md` and `/work/.evidence/qa-result.json`.
+
 ## Independent review 3 — PASS
 
 Review 3 inspected implementation `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8` from documentation checkout `de6a5787967175c90f4714e2f031e98f17f63f7d`. Later commits change only review, verification, handoff, and Graphify files. Live JavaScript and CSS are byte-identical to a clean build using footer label `803b5efb`.
