@@ -6,12 +6,24 @@
 - Demo URL: https://relay-logic.sociobot.in/demo
 - Product type: static Vite and TypeScript browser game
 - Deployed implementation SHA: `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8`
-- Documentation and verification SHA: `135e9d1e3aba9aac62a1123a2f672f56ae69c128`
+- Documentation baseline before review 1: `9d4daa2db10252e17f8b129e1a48a736d4629fd2`
 - Previous runtime behavior source ancestor: `2baa0eab3319529988826a02a402e67fc2b8a428`
 - Deployment: existing Azure Static Web App `sf-relay-logic`, Central US, production environment
 - Deployed: 2026-09-05 UTC
 
-The deployed page reports build `727e7d6c`. Production references the clean build's `index-Dz1qeejK.js` and `index-BuJPnqMq.css`. This repair is a scoped style and browser-test change; it does not alter puzzle generation, storage, or game rules.
+At the repair deployment, the page reported build `727e7d6c` and referenced `index-Dz1qeejK.js` with `index-BuJPnqMq.css`. This repair was a scoped style and browser-test change; it did not alter puzzle generation, storage, or game rules. Review 1 records the later report-only live build label below.
+
+## Independent review 1 — PASS
+
+Review 1 inspected implementation `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8` from clean checkout `d990735a6dc5e28f0035c14c6f807455fa6295da`. Changes after the implementation are reporting and Graphify output only. The live footer label is `803b5efb`; live CSS is byte-identical to the clean build, and live JavaScript is identical after normalizing only the build label and source-map filename.
+
+The result is **PASS** with zero findings and zero untested public claims. A clean worktree passed `npm ci`, 8 unit tests, 29 browser tests, `npm run build`, and all 22 claim commands separately. The same 29 browser tests passed against live HTTPS.
+
+Fresh desktop and 390 px phone browsers showed the job, audience, sample action, facts, and playable board before scrolling. The one-click sample showed populated play and a persistent demo label. Reset deleted both demo keys while preserving seeded real data. The current daily board (`2026-09-06 · 4033961918`) reached its actual 36-socket win screen in 31 moves. A phone run reached the loss screen and same-seed restart.
+
+Live route, recovery, privacy, keyboard, touch, focus, reduced-motion, 200% text, and designed-404 checks passed. Actual keyboard focus on both demo-banner actions measured 3 px and 15.25:1. A 120-frame sample measured 60.0 FPS. Fresh Lighthouse scores were 100 in performance, accessibility, best practices, and SEO; LCP was 1.0 s, CLS 0, and total blocking time 50 ms.
+
+The full report is `.factory/review-1.md`. Evidence is under `/work/.evidence/relay-logic-review-1/`.
 
 ## Verification 4 finding — resolved
 
