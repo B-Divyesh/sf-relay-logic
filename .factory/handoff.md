@@ -21,6 +21,16 @@ Repair 4 scopes the existing 3 px ring to the dark banner and uses the ivory fac
 
 The historical report remains in `.factory/verification-4.md`. Its finding is closed by deployed implementation `727e7d6`; all earlier verification findings are also closed.
 
+## Verification 5 — PASS
+
+Independent verification 5 reviewed implementation `727e7d6ceb8c69e2b7024eac76ef10c0d4442fd8` against the live HTTPS page. The later documentation record is `57616d08daaa2b291343af5e36d93d3a8163afe6`; the checked checkout and live build label are `803b5efb`. The difference after the implementation is handoff/Graphify reporting, not product code.
+
+The result is **PASS** with zero findings and zero untested claims. A fresh clone passed `npm ci`, 8 unit tests, 29 browser tests, `npm run build`, and all 22 claim commands one at a time. The complete 29-test suite also passed against the live URL. Axe checks found no serious or critical issues on all application routes; `verify-url.sh` passed `/` and `/demo` with no console errors.
+
+Fresh desktop and phone live views showed the job, the solo-puzzle audience, **Try it with sample data**, the three facts, and the playable board before scrolling. The one-click demo showed a populated sample, retained its persistent label, and Reset demo left seeded real keys unchanged. The current UTC daily run (`2026-09-06`, seed `4033961918`) filled all 36 sockets in 31 moves and showed “Every signal is connected”. A separate phone run reached “This run ended” and same-seed restart reset its relays and fuses. The repaired demo-banner controls rendered a 3 px ivory ring at `15.25:1` contrast at 1440 px and 390 px.
+
+Evidence and the full report are in `.factory/verification-5.md` and `/work/.evidence/relay-logic-verify-5/`. The factory result copy is `/work/.evidence/qa-report.md` and `/work/.evidence/qa-result.json`.
+
 ## Repair 3
 
 Independent verification 3 found seven public promises without complete outcome coverage. All are now covered:
